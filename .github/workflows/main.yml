@@ -19,9 +19,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-
-      - name: 
-        uses: 
+          
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
