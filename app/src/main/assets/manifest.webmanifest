@@ -1,0 +1,9 @@
+{
+  "name": "Universal Menswear Digital Checklist",
+  "short_name": "UM Checklist",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#e9eef2",
+  "theme_color": "#17324d",
+  "description": "Editable Sleeve Setting, Lapel, Collar and Back Seam checklist."
+}

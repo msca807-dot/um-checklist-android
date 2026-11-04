@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17324d">
+<title>Sleeve Setting Checklist</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--ink:#20272d;--line:#53616b;--blue:#17324d;--paper:#fff;--bg:#e9eef2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.toolbar{position:sticky;top:0;z-index:5;background:#17324d;color:#fff;padding:10px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0002}
+.toolbar strong{margin-right:auto;font-size:15px}
+button{border:0;border-radius:8px;padding:10px 13px;font-weight:700;background:#fff;color:#17324d}
+button.primary{background:#e4a83a;color:#17212a}
+.status{font-size:12px;opacity:.9;width:100%}
+.sheet{max-width:1100px;margin:18px auto;background:var(--paper);padding:24px;box-shadow:0 4px 18px #0002}
+h1{text-align:center;font-size:25px;margin:0 0 4px;color:#111}
+.company{text-align:center;font-weight:700;margin-bottom:20px}
+.meta{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;margin:12px 0 18px}
+.field{display:flex;align-items:center;gap:5px;min-width:0;font-size:13px;font-weight:700}
+input,textarea{font:inherit;color:#111;background:#fff;border:1px solid #8b969e;border-radius:3px;padding:7px;min-width:0;width:100%;outline-color:#2875b5}
+.meta input{height:34px}
+.section-title{text-align:center;font-weight:800;font-size:19px;margin:18px 0 7px;border-bottom:2px solid #333;padding-bottom:5px}
+.table-wrap{overflow-x:auto;margin-bottom:16px}
+table{border-collapse:collapse;width:100%;min-width:850px;table-layout:fixed}
+th,td{border:1.5px solid #333;padding:4px;vertical-align:middle}
+th{font-size:13px;background:#f0f2f3;text-align:center}
+td input{border:0;border-radius:0;min-height:34px;padding:6px;background:transparent}
+td input:focus{background:#fff8dc;outline:1px solid #2875b5}
+.col-process{width:10%}.col-check{width:17%}.col-qty{width:10%}.col-ok{width:8%}.col-not{width:9%}.col-root{width:28%}.col-remarks{width:18%}
+.signatures{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:30px}
+.signatures label{font-size:12px;font-weight:700}
+.signatures input{border:0;border-bottom:1.5px solid #333;border-radius:0;margin-top:12px}
+.note{font-size:12px;color:#5d6870;margin-top:18px}
+@media(max-width:650px){
+ .sheet{margin:0;padding:14px 10px}
+ h1{font-size:19px}
+ .meta{grid-template-columns:1fr 1fr}
+ .field{display:block}
+ .field input{margin-top:4px}
+ .signatures{grid-template-columns:1fr 1fr}
+ .toolbar strong{width:100%}
+}
+@media print{
+ body{background:#fff}.toolbar{display:none}.sheet{margin:0;max-width:none;padding:10mm;box-shadow:none}
+ input{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ .table-wrap{overflow:visible}table{min-width:0}
+ td input{font-size:8pt;padding:2px}
+ th{font-size:8pt}
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+<strong>Universal Menswear Ltd. · Digital Checklist</strong>
+<button class="primary" onclick="saveNow()">Save</button>
+<button onclick="window.print()">Print / Save PDF</button>
+<button onclick="newForm()">New blank form</button>
+<div class="status" id="status">Your entries are saved automatically on this device.</div>
+</div>
+<main class="sheet" id="sheet">
+<h1><input aria-label="Checklist title" data-save value="Sleeve Setting + Lapel + Collar + Back Seam Checklist" style="text-align:center;font-size:inherit;font-weight:800;border:1px solid #8b969e"></h1>
+<div class="company"><input aria-label="Company name" data-save value="Universal Menswear Ltd." style="text-align:center;font-weight:700;border:1px solid #8b969e"></div>
+<div class="meta">
+<label class="field">Buyer <input data-save placeholder="Enter buyer"></label>
+<label class="field">Style <input data-save placeholder="Enter style"></label>
+<label class="field">Color <input data-save placeholder="Enter color"></label>
+<label class="field">Date <input data-save type="text" placeholder="DD/MM/YYYY"></label>
+<label class="field">Line No. <input data-save placeholder="Enter line number"></label>
+</div>
+<div id="sections"></div>
+<div class="signatures">
+<label>Reported By<input data-save placeholder="Type name"></label>
+<label>Line Tech<input data-save placeholder="Type name"></label>
+<label>APM/PM<input data-save placeholder="Type name"></label>
+<label>QM<input data-save placeholder="Type name"></label>
+</div>
+<p class="note">Digital form · Fill every box as needed. Use “Print / Save PDF” to save or share a completed checklist.</p>
+</main>
+<script>
+const groups = [
+ ["Sleeve Setting",["Shirring","Cut Mark","Seam Allowance","Armhole Tape Attach","Sleeve Foam Attachment"]],
+ ["Lapel",["Lapel Marking","Lapel Fullness","Lapel Pressing"]],
+ ["Collar",["Collar Making","Collar Pressing","Collar Joining"]],
+ ["Back Seam",["Panel Joining","Cut Mark","Machine Adjustment"]]
+];
+const fields = ["Check Qty","OK","Not OK","Root Cause (If Not Okey)","Remarks"];
+const sections = document.getElementById("sections");
+function makeSection(title, suffix){
+ const heading=document.createElement("div"); heading.className="section-title"; heading.textContent=title; sections.appendChild(heading);
+ const wrap=document.createElement("div"); wrap.className="table-wrap";
+ const table=document.createElement("table");
+ table.innerHTML='<colgroup><col class="col-process"><col class="col-check"><col class="col-qty"><col class="col-ok"><col class="col-not"><col class="col-root"><col class="col-remarks"></colgroup>';
+ const thead=document.createElement("thead"); const tr=document.createElement("tr");
+ ["Process","CheckPoints",...fields].forEach(x=>{const th=document.createElement("th");th.textContent=x;tr.appendChild(th)});thead.appendChild(tr);table.appendChild(thead);
+ const tbody=document.createElement("tbody");
+ groups.forEach(([group,items])=>{
+  items.forEach((item,i)=>{
+   const tr=document.createElement("tr");
+   if(i===0){const td=document.createElement("td");td.rowSpan=items.length;td.appendChild(makeInput(group,suffix+"|"+group+"|process"));tr.appendChild(td)}
+   const check=document.createElement("td");check.appendChild(makeInput(item,suffix+"|"+group+"|"+item+"|checkpoint"));tr.appendChild(check);
+   fields.forEach(f=>{const td=document.createElement("td");td.appendChild(makeInput("",suffix+"|"+group+"|"+item+"|"+f));tr.appendChild(td)});
+   tbody.appendChild(tr);
+  });
+ });
+ table.appendChild(tbody);wrap.appendChild(table);sections.appendChild(wrap);
+}
+function makeInput(value,key){const input=document.createElement("input");input.type="text";input.value=value;input.dataset.key=key;input.setAttribute("aria-label",key);input.placeholder="";return input}
+makeSection("Before Lunch","before");
+makeSection("After Lunch","after");
+function allInputs(){return [...document.querySelectorAll("input[data-save], input[data-key]")]}
+function saveNow(){
+ const data={};allInputs().forEach((el,i)=>{data[el.dataset.key || ("header-"+i)]=el.value});
+ localStorage.setItem("sleeveChecklistData",JSON.stringify(data));
+ document.getElementById("status").textContent="Saved on this device · "+new Date().toLocaleString();
+}
+function loadSaved(){
+ const raw=localStorage.getItem("sleeveChecklistData");if(!raw)return;
+ try{const data=JSON.parse(raw);allInputs().forEach((el,i)=>{const key=el.dataset.key || ("header-"+i);if(Object.prototype.hasOwnProperty.call(data,key))el.value=data[key]})}catch(e){}
+}
+function newForm(){if(!confirm("Start a new blank checklist? This clears the saved entries on this device."))return;
+ localStorage.removeItem("sleeveChecklistData");allInputs().forEach(el=>{if(el.dataset.key)el.value="";else if(el.type==="text" && el.getAttribute("aria-label")==="Checklist title")el.value="Sleeve Setting + Lapel + Collar + Back Seam Checklist";else if(el.getAttribute("aria-label")==="Company name")el.value="Universal Menswear Ltd.";else el.value=""});
+ document.getElementById("status").textContent="New blank form. Changes will save automatically.";
+}
+loadSaved();
+let timer;document.addEventListener("input",e=>{if(e.target.matches("input")){clearTimeout(timer);timer=setTimeout(saveNow,500)}});
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>
