@@ -1,0 +1,39 @@
+UM CHECKLIST — BUILD APK WITHOUT A PC
+
+This package contains the Android Studio project plus a GitHub Actions cloud-build workflow.
+GitHub's hosted runner compiles the APK in the cloud. You do not need a computer.
+
+WHAT YOU NEED
+- A free GitHub account
+- Your Android phone and a browser
+- Internet access
+
+PHONE-ONLY BUILD STEPS
+1. Sign in at https://github.com/ in your phone browser.
+2. Create a new repository. Name it: um-checklist-android
+   Choose Public or Private; either works. Do not add a README, .gitignore or license.
+3. Extract this ZIP using your phone's Files app.
+4. Open the new empty repository in GitHub. Use Add file > Upload files.
+   Select the extracted project files and folders, including the hidden
+   .github/workflows/android.yml file. If your browser/file picker hides
+   dot-folders, use GitHub's web editor to create the workflow file at
+   .github/workflows/android.yml and paste in the workflow from this package.
+5. Commit the files to the main branch.
+6. Open the repository's Actions tab. Select "Build UM Checklist APK".
+   If prompted, enable GitHub Actions, then choose Run workflow.
+7. Wait for the run to finish with a green check mark.
+8. Open the completed run. Under Artifacts, tap "UM-Checklist-APK" to download
+   the ZIP containing app-debug.apk.
+9. Extract that downloaded ZIP, tap app-debug.apk, and follow Android's install
+   prompt. If Android blocks it, allow "Install unknown apps" for the browser
+   or file manager you used, then retry.
+
+IMPORTANT
+- The workflow builds an unsigned debug APK suitable for personal installation.
+- It is not a Play Store release and is not signed with a private release key.
+- The artifact is available for 14 days; download it when the build completes.
+- Checklist entries are stored locally on the phone. Back up/print important
+  completed forms before clearing app data or uninstalling.
+- GitHub may change its mobile interface. If folder upload is difficult, create
+  the repository on GitHub and use its web editor to add the files. Keep the
+  directory structure exactly as shown in the ZIP.
